@@ -1,0 +1,25 @@
+FB_CONFIG=${FB_CONFIG:-./config.json}
+if [ ! -f "$FB_CONFIG" ]; then
+  # If there is no configuration file, create it with some default values
+  echo "No configuration file $FB_CONFIG"
+  echo "Creating a new one"
+  # Copy default configuration file
+  cp ./config.json.save "$FB_CONFIG"
+  # Substitute some parameters with jq
+  jq '.port = ":8080"' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.serverRoot = "http://localhost:8080" ' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.dbtype = "sqlite3"' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.dbconfig = "./focalboard.db"' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.postgres_dbconfig = "dbname=focalboard sslmode=disable"' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.useSSL = false' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.webpath = "./pack"' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.filespath = "./files"' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.telemetry = true' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.session_expire_time = 2592000' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.session_refresh_time = 18000' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.localOnly = false' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.enableLocalMode = true' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+  jq '.localModeSocketLocation = "/var/tmp/focalboard_local.socket"' "$FB_CONFIG" >"$FB_CONFIG.tmp" && mv "$FB_CONFIG.tmp" "$FB_CONFIG"
+else
+  echo "Using existing config file $FB_CONFIG"
+fi

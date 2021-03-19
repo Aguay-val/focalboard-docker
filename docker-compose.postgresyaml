@@ -1,0 +1,18 @@
+version: '3'
+services: 
+  server:
+    build: 
+      context: docker/server
+      dockerfile: Dockerfile
+    ports:
+    - "8000:8000"
+    environment: 
+      FB_DBNAME: focaldb
+      FB_USERNAME: focaluser
+      FB_PASSWORD: mysuperpassword
+  db:
+    image: postgres
+    environment: 
+        POSTGRES_DB: focaldb
+        POSTGRES_USER: focaluser
+        POSTGRES_PASSWORD: mysuperpassword
