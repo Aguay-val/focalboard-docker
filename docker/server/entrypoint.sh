@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Function to generate a random salt
+# Function to generate a random salt (Maybe  useful in later release)
 generate_salt() {
   tr -dc 'a-zA-Z0-9' </dev/urandom | fold -w 48 | head -n 1
 }
@@ -20,21 +20,8 @@ DB_PORT_NUMBER=${DB_PORT_NUMBER:-5432}
 DB_USE_SSL=${DB_USE_SSL:-disable}
 FB_DBNAME=${FB_DBNAME:-focalboard}
 FB_CONFIG=${FB_CONFIG:-/app/focalboard/config.json}
-echo "BONJOUR"
-_1=$(echo "$1" | awk '{ s=substr($0, 0, 1); print s; }')
-echo $_1
-if [ "$_1" = '-' ]; then
-  set -- focalboard "$@"
-fi
 
-echo "¥1 : $1"
 if [ "$1" = '/app/focalboard/bin/focalboard-server' ]; then
-  # Check CLI args for a -config option
-  for ARG in "$@"; do
-    case "$ARG" in
-    -config=*) FB_CONFIG=${ARG#*=} ;;
-    esac
-  done
 
   if [ ! -f "$FB_CONFIG" ]; then
     # If there is no configuration file, create it with some default values
